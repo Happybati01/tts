@@ -1,0 +1,8 @@
+export default async function handler(req, res) {
+  const { text, voice = 'en-IN-NeerjaNeural' } = req.query;
+  if (!text) return res.status(400).json({error:'No text'});
+  const r = await fetch(`https://ercc.cc/api/tts?voice=${voice}&text=${encodeURIComponent(text)}`);
+  const buf = Buffer.from(await r.arrayBuffer());
+  res.setHeader('Content-Type','audio/mpeg');
+  res.send(buf);
+}
